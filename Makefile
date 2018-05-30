@@ -6,7 +6,7 @@
 #    By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/07 12:54:37 by dpalombo          #+#    #+#              #
-#    Updated: 2018/05/08 10:18:21 by dpalombo         ###   ########.fr        #
+#    Updated: 2018/05/17 10:58:39 by dpalombo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ INCFILE	= includes/
 
 OBJ		= $(addprefix $(OBJFILE),$(SRC:.c=.o))
 
-DEPS	= fdf.h
+DEPS	= libfdf.h
 MDEPS	= $(addprefix $(INCFILE),$(DEPS:.h=.h))
 
 # ------------------------------------- LIB FT -------------------------------------

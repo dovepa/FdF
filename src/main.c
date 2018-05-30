@@ -6,36 +6,25 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 18:31:48 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/05/08 00:53:17 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/05/17 11:00:34 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "libfdf.h"
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	void *mlx_ptr;
 	void *win_ptr;
 
+	if (argc != 2)
+	{
+		ft_usage("./fdf exemple_of_maps");
+		return (1);
+	}
 	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, 500, 500, "|--- 42 FdF ---|");
-	mlx_pixel_put(mlx_ptr, win_ptr, 11, 11, 0xFF0000);
-	mlx_pixel_put(mlx_ptr, win_ptr, 10, 10, 0xFF0000);
-	mlx_pixel_put(mlx_ptr, win_ptr, 12, 12, 0xFF0000);
-	mlx_pixel_put(mlx_ptr, win_ptr, 13, 13, 0xFF0000);
-	int  y = 100;
-	int x;
-   while (y < 200)
-   {
-       x = 100;
-       while (x < 200)
-       {
-           mlx_pixel_put(mlx_ptr, win_ptr, x, y, 0xFF0000);
-           x++;
-       }
-       y++;
-   }
-
+	mlx_init();
+	win_ptr = mlx_new_window(mlx_ptr, 500, 500, ft_strjoin("|--- 42 FdF ---| Map : ", argv[1]));
 	mlx_loop(mlx_ptr);
 	return (0);
 }
