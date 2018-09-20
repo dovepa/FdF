@@ -6,13 +6,13 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 21:41:42 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/05/17 10:51:53 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/09/20 14:59:02 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "libfdf.h"
 
-void ft_ligne(int xa,int ya,int xb,int yb, void *mlx_ptr, void *win_ptr, int color) 
+static void ft_ligne(int xa,int ya,int xb,int yb, unsigned int *data, int win_width, int long color) 
 {
 	int dx;
 	int	dy;
@@ -33,7 +33,7 @@ void ft_ligne(int xa,int ya,int xb,int yb, void *mlx_ptr, void *win_ptr, int col
 	dx = dx < 0 ? dx * -1 : dx;
 	dy = dy < 0 ? dy * -1 : dy;
 
-	mlx_pixel_put(mlx_ptr, win_ptr, x, y, color);
+	data[x * win_width + y] = color;
 	if ( dx > dy )
 	{
 		cumul = dx / 2 ;
@@ -46,7 +46,7 @@ void ft_ligne(int xa,int ya,int xb,int yb, void *mlx_ptr, void *win_ptr, int col
    				cumul -= dx ;
    				y += yanc ;
 			}
-   			mlx_pixel_put(mlx_ptr, win_ptr, x, y, color);
+   			data[x * win_width + y] = color;
 		}
 	}
     else
@@ -61,15 +61,14 @@ void ft_ligne(int xa,int ya,int xb,int yb, void *mlx_ptr, void *win_ptr, int col
 		        cumul -= dy ;
 		        x += xanc ;
 			}
-		mlx_pixel_put(mlx_ptr, win_ptr, x, y, color);
+		data[x * win_width + y] = color;
 		}
 	}
 }
 
-void ft_dsqrt(int xa, int ya, int xb,int yb, int xc,int yc, void *mlx_ptr, void *win_ptr, int color)
+void ft_dsqrt(int xa, int ya, int xb,int yb, int xc,int yc, unsigned int *data,int win_width)
 {
-	ft_ligne(xa, ya, xb, yb, mlx_ptr, win_ptr, color);
-	ft_ligne(xa, ya, xc, yc, mlx_ptr, win_ptr, color);
+	ft_ligne(xa, ya, xb, yb, data, win_width, RED);
+	ft_ligne(xa, ya, xc, yc, data, win_width, RED);
 	return ;
 }
-
