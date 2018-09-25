@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 00:52:23 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/09/20 14:52:19 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/09/25 14:13:22 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,13 @@
 **	Keyboard
 */
 
-# define ESC_KEY	0x35
-# define UP_KEY		0x7E
-# define DOWN_KEY	0x7D
-# define RIGHT_KEY	0x7C
-# define LEFT_KEY	0x7B
-# define MORE_KEY	0x45
-# define LESS_KEY	0x4E
-
-/*
-**	find this in /System/Library/Frameworks/Carbon.framework/Versions/A/ \
-**	Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h
-*/
+# define ESC_KEY	53
+# define UP_KEY		126
+# define DOWN_KEY	125
+# define RIGHT_KEY	124
+# define LEFT_KEY	123
+# define MORE_KEY	69
+# define LESS_KEY	78
 
 /*
 **	hex colors
@@ -45,23 +40,18 @@
 # define BLUE		0x0000FF
 # define RED		0xFF0000
 
+/*
+**	Structures
+*/
+
 typedef	struct		s_mlximg
 {
 	void			*img_ptr;
-	unsigned int	*data;
+	char			*data;
 	int				size_l;
 	int				bpp;
 	int				endian;
 }					t_mlximg;
-
-typedef	struct		s_map
-{
-	int				x;
-	int				y;
-	int				z;
-	int				scale;
-	int				focus;
-}					t_map;
 
 typedef	struct		s_windows
 {
@@ -70,13 +60,15 @@ typedef	struct		s_windows
 	int				win_width;
 	int				win_height;
 	char			*title;
-	int				center_x;
-	int				center_y;
 	t_mlximg		img;
-	t_map			map;
 }					t_windows;
 
-int		ft_how_to(int key, t_windows *windows);
-void	ft_dsqrt(int xa, int ya, int xb,int yb, int xc,int yc, unsigned int *data,int win_width);
+/*
+**	Functions
+*/
+
+void ft_pixel(int x,int y, char *data, int win_width, unsigned int color);
+void ft_bresenham(int x1, int y1, int x2, int y2, char *data, int win_width, unsigned int color);
+int ft_key(int key, t_windows *windows);
 
 #endif
