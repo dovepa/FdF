@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 00:52:23 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/09/26 11:16:16 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/08 16:03:21 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 #include "libft.h"
 #include "mlx.h"
 #include <math.h>
+
+/*
+**	Map
+*/
+
+# define WIN_WIDTH	1000
+# define WIN_HEIGHT	800
+# define DEFAULTC	0xFF0000
 
 /*
 **	Keyboard
@@ -34,6 +42,13 @@
 /*
 **	hex colors for test (#include "mlx_rgb.c")
 **	Structures for use fucking colors in "mlx_rgb.c"
+**	color hex to rgb
+**	r = ((color >> 16) & 11111111);
+**	g = ((color >> 8) & 11111111);
+**	b = (color & 11111111);
+**	data[y * win_width * 4 + x * 4 + 2] = (char) r;
+**	data[y * win_width * 4 + x * 4 + 1] = (char) g;
+**	data[y * win_width * 4 + x * 4] = (char) b;
 */
 
 # define WHITE		0xFFFFFF
@@ -53,46 +68,74 @@ typedef struct		s_col_name
 **	Structures
 */
 
-typedef	struct		s_draw
+typedef	struct		s_mouse
 {
-	int				colorn;
+	int				x;
+	int				y;
+	int				xpast;
+	int				ypast;
+	int				button;	
+}					t_mouse;
+
+typedef	struct		s_vector
+{
+	int				x;
+	int				y;
+	int				z;
 	unsigned int	color;
-	int				rcolor;
-	int				mx;
-	int				my;
-	int				button;
-	int				up;
-}					t_draw;
+}					t_vector;
+
+typedef	struct		s_map
+{
+	int				zmin;
+	int				zmax;
+	int				width;
+	int				height;
+	int				zoom;
+	t_vector		**vector;
+	unsigned int	color;
+	int				ready;
+}					t_map;
 
 typedef	struct		s_mlximg
 {
 	void			*img_ptr;
-	char			*data;
+	unsigned int	*data;
 	int				size_l;
 	int				bpp;
 	int				endian;
 }					t_mlximg;
 
-typedef	struct		s_windows
+typedef	struct		s_fdf
 {
 	void			*mlx_ptr;
 	void			*win_ptr;
-	int				win_width;
-	int				win_height;
-	char			*title;
-	t_draw			draw;
-	t_mlximg		img;
-}					t_windows;
+	t_mlximg		*img;
+	t_mouse			*mouse;
+	t_map			*map;
+}					t_fdf;
+
+typedef	struct		s_bresenham
+{
+	int				e;
+	int				xi;
+	int				yi;
+	int				dx;
+	int				dy;
+	int				i;
+}					t_bresenham;
+
 
 /*
 **	Functions
 */
+t_fdf *ft_init(char *title, t_fdf *fdf);
+void	ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2);
+int		ft_key(int key, t_fdf *fdf);
+int		ft_color(t_fdf *fdf);
+int		ft_mousemove(int x,int y, t_fdf *fdf);
+int		ft_mouseup(int button, int x,int y, t_fdf *fdf);
+int		ft_mousedown(int button, int x,int y, t_fdf *fdf);
 
-void	ft_pixel(int x,int y, char *data, int win_width, unsigned int color);
-void	ft_bresenham(int x1, int y1, int x2, int y2, char *data, int win_width, unsigned int color);
-int		ft_key(int key, t_windows *windows);
-void	ft_draw(t_windows *w);
-int		ft_mousemove(int x,int y, t_windows *w);
-int		ft_mouseup(int button, int x,int y, t_windows *w);
-int		ft_mousedown(int button, int x,int y, t_windows *w);
+
 #endif

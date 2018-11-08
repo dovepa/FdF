@@ -6,69 +6,71 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/25 14:05:18 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/09/25 14:12:22 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/08 12:02:32 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libfdf.h"
 
-void ft_pixel(int x,int y, char *data, int win_width, unsigned int color)
+static void	ft_pixel(unsigned int *data, int x, int y, unsigned int color)
 {
-	int r;
-	int g;
-	int b;
-
-	r = ((color >> 16) & 11111111);
-	g = ((color >> 8) & 11111111);
-	b = (color & 11111111);
-	data[y * win_width * 4 + x * 4 + 2] = (char) r;
-	data[y * win_width * 4 + x * 4 + 1] = (char) g;
-	data[y * win_width * 4 + x * 4] = (char) b;
+	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+		return ;
+	data[y * WIN_WIDTH + x] = color;
 	return ;
 }
 
-void ft_bresenham(int x1, int y1, int x2, int y2, char *data, int win_width, unsigned int color)
+static unsigned int ft_pixel_color(t_fdf *fdf, t_bresenham val, t_vector v1, t_vector v2)
 {
-	int e;
-	int xi;
-	int yi;
-	int dx;
-	int dy;
-	int i;
-	
-	i = 0;
-	dx = ((x2 - x1) * 2) > 0 ? ((x2 - x1) * 2) : ((x2 - x1) * -2);
-	dy = ((y2 - y1) * 2) > 0 ? ((y2 - y1) * 2) : ((y2 - y1) * -2);
-	xi = x2 < x1 ? -1 : 1;
-	yi = y2 < y1 ? -1 : 1;
-	e = dy;
-	if ((e = dx) > dy)
+	fdf->map->width = WIN_WIDTH;
+	if (val.e < 10000)
 	{
-		while (i++ <= (dx / 2))
+		fdf->map->width = WIN_WIDTH;
+		v1.color = DEFAULTC;
+		v2.color = DEFAULTC;
+	}
+	return(BLUE);
+}
+
+static void	ft_bresenham_else(t_fdf *fdf, t_bresenham val, t_vector v1, t_vector v2)
+{
+	val.e = val.dy;
+	while (val.i++ <= (val.dy / 2))
 		{
-			ft_pixel(x1, y1, data, win_width, color);
-			x1 += xi;
-			e -= dy;
-			if (e <= 0 && dy != 0)
+			ft_pixel(fdf->img->data, v1.x, v1.y, ft_pixel_color(fdf, val, v1, v2));
+			v1.y += val.yi;
+			val.e -= val.dx;
+			if (val.e <= 0 && val.dx != 0)
 			{
-				y1 += yi;
-				e += dx;
+				v1.x += val.xi;
+				val.e += val.dy;
 			}
 		}
-	}
+	return ;
+}
+
+void	ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2)
+{
+	t_bresenham val;
+ 
+	val.dx = abs((v2.x - v1.x) * 2);
+	val.dy = abs((v2.y - v1.y) * 2);
+	val.xi = v2.x < v1.x ? -1 : 1;
+	val.yi = v2.y < v1.y ? -1 : 1;
+	val.i = 0;
+	if ((val.e = val.dx) > val.dy)
+		while (val.i++ <= (val.dx / 2))
+		{
+			ft_pixel(fdf->img->data, v1.x, v1.y, ft_pixel_color(fdf, val, v1, v2));
+			v1.x += val.xi;
+			val.e -= val.dy;
+			if (val.e <= 0 && val.dy != 0)
+			{
+				v1.y += val.yi;
+				val.e += val.dx;
+			}
+		}
 	else 
-	{
-		while (i++ <= (dy / 2))
-		{
-			ft_pixel(x1, y1, data, win_width, color);
-			y1 += yi;
-			e -= dx;
-			if (e <= 0 && dx != 0)
-			{
-				x1 += xi;
-				e += dy;
-			}
-		}
-	}
+		ft_bresenham_else(fdf, val, v1, v2);
 	return ;
 }

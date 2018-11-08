@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/12 00:10:54 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/05/07 12:32:14 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/10/03 16:47:15 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/uio.h>
 
 typedef	struct		s_list
 {
@@ -94,4 +97,7 @@ int					ft_recursive_factorial(int nb);
 void				ft_error(void);
 void				ft_strerror(char const *str);
 void				ft_usage(char const *str);
+void				ft_lstrev(t_list **list);
+int					ft_wordlen(char *str, char sep);
+
 #endif
