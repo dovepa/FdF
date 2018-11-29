@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 00:52:23 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/08 16:03:21 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:08:26 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@
 
 # define WIN_WIDTH	1000
 # define WIN_HEIGHT	800
-# define DEFAULTC	0xFF0000
+# define DEFAULTC	0xFFFFFF
+# define DEFAULTX	45.0
+# define DEFAULTY	25.0
 
 /*
 **	Keyboard
@@ -37,7 +39,11 @@
 # define MORE_KEY	69
 # define LESS_KEY	78
 # define C_COLOR	8
-# define R_COLOR	15
+# define R_ROTATE	15
+# define KING		40
+# define Q_KEY		12
+# define W_KEY		13
+
 
 /*
 **	hex colors for test (#include "mlx_rgb.c")
@@ -68,20 +74,19 @@ typedef struct		s_col_name
 **	Structures
 */
 
-typedef	struct		s_mouse
+typedef	struct		s_arrow
 {
-	int				x;
-	int				y;
-	int				xpast;
-	int				ypast;
-	int				button;	
-}					t_mouse;
+	double			x;
+	double			y;
+	double			p;
+	int				rotate;
+}					t_arrow;
 
 typedef	struct		s_vector
 {
-	int				x;
-	int				y;
-	int				z;
+	double				x;
+	double			y;
+	double			z;
 	unsigned int	color;
 }					t_vector;
 
@@ -89,12 +94,11 @@ typedef	struct		s_map
 {
 	int				zmin;
 	int				zmax;
-	int				width;
-	int				height;
-	int				zoom;
+	int				cn;
 	t_vector		**vector;
 	unsigned int	color;
 	int				ready;
+	int				zoom;
 }					t_map;
 
 typedef	struct		s_mlximg
@@ -108,11 +112,13 @@ typedef	struct		s_mlximg
 
 typedef	struct		s_fdf
 {
+	int				x;
+	int				y;
 	void			*mlx_ptr;
 	void			*win_ptr;
 	t_mlximg		*img;
-	t_mouse			*mouse;
 	t_map			*map;
+	t_arrow			*arrow;
 }					t_fdf;
 
 typedef	struct		s_bresenham
@@ -120,8 +126,8 @@ typedef	struct		s_bresenham
 	int				e;
 	int				xi;
 	int				yi;
-	int				dx;
-	int				dy;
+	double			dx;
+	double			dy;
 	int				i;
 }					t_bresenham;
 
@@ -129,13 +135,20 @@ typedef	struct		s_bresenham
 /*
 **	Functions
 */
-t_fdf *ft_init(char *title, t_fdf *fdf);
+
+t_fdf 	*ft_init(char *title, t_fdf *fdf);
 void	ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2);
+void	ft_imgdel(t_fdf *fdf);
+void	ft_inimg(t_fdf *fdf);
+void	ft_draw(t_fdf *fdf);
+t_list  *ft_parseur(int fd, t_fdf *fdf);
+void	ft_delsplit(char **s);
+int		ft_exit(t_fdf *fdf);
 int		ft_key(int key, t_fdf *fdf);
 int		ft_color(t_fdf *fdf);
-int		ft_mousemove(int x,int y, t_fdf *fdf);
-int		ft_mouseup(int button, int x,int y, t_fdf *fdf);
-int		ft_mousedown(int button, int x,int y, t_fdf *fdf);
+void	ft_pixel(unsigned int *data, int x, int y, unsigned int color);
+void ft_dellst(void *a, size_t b);
+
 
 
 #endif

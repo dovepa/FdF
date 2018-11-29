@@ -6,13 +6,13 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/25 14:05:18 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/08 12:02:32 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/28 03:36:57 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libfdf.h"
 
-static void	ft_pixel(unsigned int *data, int x, int y, unsigned int color)
+void	ft_pixel(unsigned int *data, int x, int y, unsigned int color)
 {
 	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
 		return ;
@@ -22,14 +22,11 @@ static void	ft_pixel(unsigned int *data, int x, int y, unsigned int color)
 
 static unsigned int ft_pixel_color(t_fdf *fdf, t_bresenham val, t_vector v1, t_vector v2)
 {
-	fdf->map->width = WIN_WIDTH;
-	if (val.e < 10000)
-	{
-		fdf->map->width = WIN_WIDTH;
-		v1.color = DEFAULTC;
-		v2.color = DEFAULTC;
-	}
-	return(BLUE);
+	(void)fdf;
+	(void)val;
+	(void)v1;
+	(void)v2;
+	return(fdf->map->color);
 }
 
 static void	ft_bresenham_else(t_fdf *fdf, t_bresenham val, t_vector v1, t_vector v2)
@@ -53,8 +50,8 @@ void	ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2)
 {
 	t_bresenham val;
  
-	val.dx = abs((v2.x - v1.x) * 2);
-	val.dy = abs((v2.y - v1.y) * 2);
+	val.dx = fabs((v2.x - v1.x) * 2);
+	val.dy = fabs((v2.y - v1.y) * 2);
 	val.xi = v2.x < v1.x ? -1 : 1;
 	val.yi = v2.y < v1.y ? -1 : 1;
 	val.i = 0;

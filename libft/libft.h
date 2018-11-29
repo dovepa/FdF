@@ -6,13 +6,13 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/12 00:10:54 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/10/03 16:47:15 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/11 10:01:47 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# define BUFF_SIZE 42
+# define BUFF_SIZE 4096
 
 # include <string.h>
 # include <stdlib.h>
@@ -99,5 +99,6 @@ void				ft_strerror(char const *str);
 void				ft_usage(char const *str);
 void				ft_lstrev(t_list **list);
 int					ft_wordlen(char *str, char sep);
+unsigned int		ft_atohexp(const char *str);
 
 #endif

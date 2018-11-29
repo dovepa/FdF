@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main->c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 18:31:48 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/10/09 16:12:04 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/29 15:09:58 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,74 +14,6 @@
 
 
 
-// mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-
-
-void	ft_imgdel(t_fdf *fdf)
-{
-	if (fdf->img != NULL)
-	{
-		if (fdf->img->img_ptr != NULL)
-			mlx_destroy_image(fdf->mlx_ptr, fdf->img->img_ptr);
-		ft_memdel((void **)&fdf->img);
-	}
-	return ;
-}
-
-void	ft_inimg(t_fdf *fdf)
-{
-	if ((fdf->img = ft_memalloc(sizeof(t_mlximg))) == NULL)
-		return ;
-	if ((fdf->img->img_ptr = mlx_new_image(fdf->mlx_ptr, WIN_WIDTH, WIN_HEIGHT)) == NULL)
-		return (ft_imgdel(fdf));
-	fdf->img->img_ptr = fdf->img->data = (unsigned int *)mlx_get_data_addr(fdf->img->img_ptr, &fdf->img->bpp,\
-	 &fdf->img->size_l, &fdf->img->endian);
-	return ;
-}
-
-void ft_draw(t_fdf *fdf)
-{
-
-	ft_inimg(fdf);
-	mlx_put_image_to_window(fdf->mlx_ptr, fdf->win_ptr, fdf->img->img_ptr, 0, 0);
-	ft_imgdel(fdf);
-	return ;
-}
-
-t_fdf *ft_init(char *title, t_fdf *fdf)
-{
-	if ((fdf->mlx_ptr = mlx_init()) == NULL ||	
-	(fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, title)) == NULL ||
-	(fdf->mouse = ft_memalloc(sizeof(t_mouse))) == NULL)
-		return (NULL);
-	return (fdf);
-}
-
-t_list *ft_parseur(int fd, t_fdf *fdf)
-{
-	char	*str;
-	t_list	*list;
-	t_list *listc;
-
-	list = NULL;
-	listc = list;
-	fdf->map->width = 0;	
-	fdf->map->height = 0;
-	while (get_next_line(fd, &str) > 0)
-	{
-		if (fdf->map->width == 0)
-			fdf->map->width = ft_wordlen(str, ' ');
-		if (fdf->map->width != ft_wordlen(str, ' ') || fdf->map->width == 0)
-			return (NULL);
-		listc = ft_lstnew((void *)str, ft_strlen(str));
-		fdf->map->height++;
-		ft_lstadd(&list, listc);
-		listc = list;
-	}
-	ft_lstrev(&listc);
-	listc = list;
-	return (listc);
-}
 void	ft_delsplit(char **s)
 {
 	int i;
@@ -95,71 +27,123 @@ void	ft_delsplit(char **s)
 	ft_memdel((void *)&s);
 }
 
+void	ft_findz(t_fdf *fdf)
+{
+	int x;
+	int y;
+
+	x = 0;
+	y = 0;
+	while (y < fdf->y)
+	{
+		x = 0;
+		while (x < fdf->x)
+		{
+			if (fdf->map->vector[y][x].z < fdf->map->zmin)
+				fdf->map->zmin = fdf->map->vector[y][x].z;
+			if (fdf->map->vector[y][x].z > fdf->map->zmax)
+				fdf->map->zmax = fdf->map->vector[y][x].z;
+			x++;
+		}
+		y++;
+	}
+	return ;
+}
+
 int ft_makemap(t_list *list, t_fdf *fdf)
 {
 	int x;
 	int y;
 	char **tmp;
 	char **tmp2;
+	t_list *listc;
 
 	x = 0;
+	listc = list;
 	y = 0;
 	if (list == NULL)
 		return (1);
 	
-	if ((fdf->map->vector = ft_memalloc(sizeof(t_vector *) * fdf->map->height)) == NULL)
+	if (!(fdf->map->vector = ft_memalloc(sizeof(t_vector *) * fdf->y)))
 			return (1);
-	while (y < fdf->map->height + 1) 
-	{
-		if ((fdf->map->vector[y] = ft_memalloc(sizeof(t_vector) * fdf->map->width)) == NULL)
-			return (1);
-		y++;
-	}
 
-	
+	while (x < fdf->y)
+		if (!(fdf->map->vector[x++] = ft_memalloc(sizeof(t_vector) * fdf->x)))
+			return (1);
+
 	if (fdf->map->vector == NULL)
 	{
 		ft_memdel((void **)&fdf->map);
 		return (1);
 	}
-	
-	ft_putendl("abc");
 	y = 0;
-	while (y < fdf->map->height ) 
+	x = 0;
+	while (y < fdf->y ) 
 	{
-		if ((tmp = ft_strsplit(list->content, ' ')) == NULL)
+		if ((tmp = ft_strsplit(listc->content, ' ')) == NULL)
 			return (1);
-		while (x < fdf->map->width)
+		while (x < fdf->x)
 		{
-			ft_putnbr(x);
-			ft_putendl(" ");
-			ft_putnbr(fdf->map->width);
-			ft_putendl(" ");
-			fdf->map->vector[y][x].x = x;
-			fdf->map->vector[y][x].y = y;
+		
+			fdf->map->vector[y][x].x = (double)x;
+			fdf->map->vector[y][x].y = (double)y;
 			if (ft_strchr(tmp[x], ',') == NULL)
 			{
-				fdf->map->vector[y][x].z = ft_atoi(tmp[x]);
+				fdf->map->vector[y][x].z = (double)ft_atoi(tmp[x]);
 				fdf->map->vector[y][x].color = DEFAULTC;
 			}
 			else
 			{
 				if ((tmp2 = ft_strsplit(tmp[x], ',')) == NULL)
 					return (1);
-				fdf->map->vector[y][x].z = ft_atoi(tmp2[0]);
-				fdf->map->vector[y][x].color = ft_atoi(tmp2[1]);
+				fdf->map->vector[y][x].z = (double)ft_atoi(tmp2[0]);
+				fdf->map->vector[y][x].color = ft_atohexp(tmp2[1]);
 				ft_delsplit(tmp2);				
 			}		
 			x++;
 		}
-		list = list->next;
+		listc = listc->next;
 		ft_delsplit(tmp);
 		x = 0;
 		y++;
 	}
-
-
+	ft_findz(fdf);
 	return (0);	
+}
+
+int ft_exit(t_fdf *fdf)
+{
+	(void)fdf;
+	//free(fdf);
+	mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
+	exit(EXIT_SUCCESS);
+}
+
+int ft_cmdkey(int key, t_fdf *fdf)
+{
+	if (key == MORE_KEY || key == LESS_KEY)
+	{
+		if (fdf->map->zoom <= 1 )
+			fdf->map->zoom = 2;
+		fdf->map->zoom += 2 * (key % 10) - 17;
+		ft_draw(fdf);
+	}
+	if (key == UP_KEY || key == DOWN_KEY)
+	{
+		fdf->arrow->y += (double)((2 * (key % 120) - 11) / 10.0);
+		ft_draw(fdf);
+	}
+	if (key == RIGHT_KEY || key == LEFT_KEY)
+	{
+		fdf->arrow->x += (double)((2 * (key % 120) - 7) / 10.0);
+		ft_draw(fdf);
+	}
+	if (key == Q_KEY || key == W_KEY)
+	{
+		fdf->arrow->p += (double)((2 * (key % 10) - 5) / 50.0);
+		ft_draw(fdf);
+	}
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -172,32 +156,43 @@ int	main(int argc, char **argv)
 		ft_usage("\x1b[1m\x1b[41m ./fdf exemple_of_maps \x1b[0m");
 		return (1);
 	}
-	if ((fdf = ft_memalloc(sizeof(t_fdf))) == NULL || (fdf->map = ft_memalloc(sizeof(t_map))) == NULL)
+	if ((fdf = ft_memalloc(sizeof(t_fdf))) == NULL)
 		return (1);
-	if ((fd = open(argv[1], O_RDONLY)) < 0 || (ft_makemap(ft_parseur(fd, fdf), fdf) == 1))
+	if ((fdf->map = ft_memalloc(sizeof(t_map))) == NULL)
+		return (1);
+	fdf->map->zmin = 0;
+	fdf->map->zmax = 0;
+	fdf->map->zoom = 25;
+	fdf->map->ready = 0;
+	fdf->map->cn = 0;
+	fdf->map->color = DEFAULTC;
+
+
+	if ((fd = open(argv[1], O_RDONLY)) < 0)
 	{
 		ft_strerror("\x1b[1m\x1b[41m  invalid file \x1b[0m");
 		return (1);
 	}
+	t_list *list;
+	list = NULL;
+	list = ft_parseur(fd, fdf);
+	
+	
+	ft_makemap(list, fdf);
 	close(fd);
-	if ((ft_init(ft_strjoin("|--- 42 FdF ---| Map : ", argv[1]), fdf)) == NULL)
+	char *str1 = ft_strjoin("|--- 42 FdF ---| Map : ", argv[1]);
+	if ((ft_init(str1, fdf)) == NULL)
 		ft_strerror("\x1b[1m\x1b[41m --- Mlx init --- \x1b[0m");
 	ft_putendl("\x1b[1m\x1b[32m --- Mlx init --- \x1b[0m");
-	
+	fdf->arrow->x = DEFAULTX;
+	fdf->arrow->y = DEFAULTY;
 
-	ft_draw(fdf);
-	
-	mlx_key_hook(fdf->win_ptr, ft_key, (void *)&fdf);
-	mlx_hook(fdf->win_ptr, 6, 0, ft_mousemove, (void *)&fdf);
-	mlx_hook(fdf->win_ptr, 4, 0, ft_mousedown, (void *)&fdf);
-	mlx_hook(fdf->win_ptr, 5, 0, ft_mouseup, (void *)&fdf);
-	
-	
-	
+	ft_draw(fdf);		
+
+	mlx_key_hook(fdf->win_ptr, ft_key, fdf);
+	mlx_hook(fdf->win_ptr, 17, 0, ft_exit, fdf);
+	mlx_hook(fdf->win_ptr, 2, 0, ft_cmdkey, fdf);	
 	mlx_loop(fdf->mlx_ptr);
 
 	return (0);
 }	
-
-
-/*mlx_destroy_image(w.mlx_ptimg->img_ptr);*/

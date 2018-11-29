@@ -6,64 +6,82 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:39:08 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/08 18:39:02 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/11 19:38:57 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	size_t	ft_count_words(char *s, char c)
+static size_t	ft_countwords(char *str, char sep)
 {
-	size_t	count;
-	int		in_substring;
+	size_t result;
+	size_t i;
 
-	count = 0;
-	in_substring = 0;
-	while (*s)
+	i = 0;
+	result = 0;
+	while (str[i] && str[i] == sep)
+		i++;
+	while (str[i])
 	{
-		if (in_substring == 1 && *s == c)
-			in_substring = 0;
-		if (in_substring == 0 && *s != c)
-		{
-			in_substring = 1;
-			count++;
-		}
-		s++;
+		while (str[i] && str[i] != sep)
+			i++;
+		result++;
+		while (str[i] && str[i] == sep)
+			i++;
 	}
-	return (count);
+	return (result);
 }
 
-static size_t	ft_word_len(char *s, char c)
+static size_t	word_len(char const *s, char c)
 {
-	size_t	len;
+	size_t i;
 
-	len = 0;
-	while (*s++ != c)
-		len++;
-	return (len);
+	i = 0;
+	while (s[i] && s[i] != c)
+		i++;
+	return (i);
+}
+
+static char		*ft_next_word(char const *s, char c)
+{
+	while (*s && *s == c)
+		s++;
+	return ((char *)s);
+}
+
+static void		ft_cleanup(char **split, size_t cur)
+{
+	while (cur > 0)
+	{
+		cur--;
+		ft_strdel(&split[cur]);
+	}
+	ft_strdel(split);
 }
 
 char			**ft_strsplit(char const *s, char c)
 {
 	char	**split;
-	size_t	nb_words;
-	int		i;
+	size_t	cur;
+	size_t	wordcount;
 
-	if (s == NULL)
+	wordcount = ft_countwords((char *)s, c);
+	split = (char **)ft_memalloc((wordcount + 1) * sizeof(char *));
+	if (split == NULL)
 		return (NULL);
-	nb_words = ft_count_words((char *)s, c);
-	if ((split = (char **)ft_memalloc((nb_words + 1) \
-	* sizeof(char *))) == NULL)
-		return (NULL);
-	i = 0;
-	while (nb_words--)
+	cur = 0;
+	while (cur < wordcount)
 	{
-		while (*s == c)
-			s++;
-		split[i] = ft_strsub((char *)s, 0, ft_word_len((char *)s, c));
-		if (split[i++] == NULL)
+		s = ft_next_word(s, c);
+		split[cur] = ft_strsub(s, 0, word_len(s, c));
+		if (split[cur] == NULL)
+		{
+			ft_cleanup(split, cur);
 			return (NULL);
-		s += ft_word_len((char *)s, c);
+		}
+		cur++;
+		s += word_len(s, c);
 	}
+	split[wordcount] = NULL;
 	return (split);
 }

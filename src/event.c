@@ -6,64 +6,65 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/25 14:12:15 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/08 14:38:44 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/28 11:22:40 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libfdf.h"
 #include "mlx_rgb.c"
 
-
-
-int	ft_mouseup(int button, int x,int y, t_fdf *fdf)
+int ft_rotate(t_fdf *fdf)
 {
-	(void)x;
-	(void)y;
-	fdf->mouse->button = button - 1;
-	return (0);
-}
-
-
-int	ft_mousedown(int button, int x,int y, t_fdf *fdf)
-{
-	(void)x;
-	(void)y;
-	fdf->mouse->button = button;
-	return (0);
-}
-
-int	ft_mousemove(int x,int y, t_fdf *fdf)
-{
-	if (fdf->mouse->button == 1)
+	if (fdf->arrow->rotate == 1)
 	{
-		fdf->mouse->xpast = fdf->mouse->x;
-		fdf->mouse->ypast = fdf->mouse->y;
-		fdf->mouse->x = x;
-		fdf->mouse->y = y;
-		//ft_draw(fdf);
+		usleep(1000);
+		fdf->arrow->x += 0.01;
+		ft_draw(fdf);
+	}
+	else
+		fdf->arrow->rotate = 0;
+	return (0);
+}
+
+int ft_king(t_fdf *fdf)
+{
+	
+	if (fdf->arrow->rotate == 1)
+	{
+		usleep(1000);
+		if (fdf->map->cn > 751)
+			fdf->map->cn  = 0;
+		if ((fdf->map->ready++ % 10) == 0)
+			fdf->map->color = mlx_col_name[fdf->map->cn].color;
+		fdf->map->cn++;
+		fdf->arrow->x += 0.01;
+		ft_draw(fdf);
+	}
+	else
+	{
+		fdf->arrow->rotate = 0;
+		fdf->map->color = DEFAULTC;
+		ft_draw(fdf);
 	}
 	return (0);
 }
 
 int ft_color(t_fdf *fdf)
 {
-	int x;
-
-	x = 0;
 	if (fdf->map->ready == 1)
 	{
-		x += 1;
-		if (x > 751)
-			x = 0;
-		fdf->map->color = mlx_col_name[x].color;
-		//ft_draw(fdf); 
-		usleep(100000);
+		if (fdf->map->cn > 751)
+			fdf->map->cn  = 0;
+		usleep(10000);
+		fdf->map->color = mlx_col_name[fdf->map->cn].color;
+		ft_draw(fdf); 
+		fdf->map->cn++;
 	}
 	else
 	{
 		fdf->map->ready = 0;
 		fdf->map->color = DEFAULTC;
-		//ft_draw(fdf);
+		ft_draw(fdf);
 	}
 	return (0);
 }
@@ -72,21 +73,21 @@ int ft_key(int key, t_fdf *fdf)
 {
 	(void)fdf;
 	if (key == ESC_KEY)
-		 exit(EXIT_SUCCESS);
+		ft_exit(fdf);
 	if (key == C_COLOR)
 	{
 		mlx_loop_hook(fdf->mlx_ptr, ft_color, fdf);
 		fdf->map->ready++;
 	}
-	if (key == MORE_KEY || key == LESS_KEY)
+	if (key == R_ROTATE)
 	{
-		fdf->map->zoom += 1;
-		//ft_draw(fdf);
+		mlx_loop_hook(fdf->mlx_ptr, ft_rotate, fdf);
+		fdf->arrow->rotate++;
 	}
-	if (key == LESS_KEY)
+	if (key == KING)
 	{
-		fdf->map->zoom -= 1;
-		//ft_draw(fdf);
+		mlx_loop_hook(fdf->mlx_ptr, ft_king, fdf);
+		fdf->arrow->rotate++;
 	}
 	return (0);
 }
