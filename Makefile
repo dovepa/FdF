@@ -6,7 +6,7 @@
 #    By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/07 12:54:37 by dpalombo          #+#    #+#              #
-#    Updated: 2018/11/08 21:43:31 by dpalombo         ###   ########.fr        #
+#    Updated: 2018/11/29 21:06:48 by dpalombo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,6 @@ INCFILE	= includes/
 OBJ		= $(addprefix $(OBJFILE),$(SRC:.c=.o))
 
 DEPS	= libfdf.h
-MDEPS	= $(addprefix $(INCFILE),$(DEPS:.h=.h))
 
 # ------------------------------------- LIB FT -------------------------------------
 
@@ -75,9 +74,10 @@ all: obj $(LIB_MLX) $(LIB_FT) $(NAME)
 obj:
 	@ mkdir -p $(OBJFILE)
 
-$(OBJFILE)%.o: $(SRCFILE)%.c
+
+$(OBJFILE)%.o: $(SRCFILE)%.c $(INCFILE)$(DEPS)
 	@ $(CC) $(CFLAGS) $(INCMLX) $(INCLIBFT) -I $(INCFILE) -o $@ -c $<
-	@ echo "$(_BOLD)$(_GREEN)------------------------------------------------------------------------------------------------>>> End check .c - .o $(_END)"
+	@ echo "$(_BOLD)$(_GREEN)------------------------------------------------------------------------------------------------>>> End check .c - .o > .h $(_END)"
 
 $(LIB_FT):
 	@ make -C $(SRCLIBFT)
@@ -87,10 +87,14 @@ $(LIB_MLX):
 	@ make -C $(SRCMLX)
 	@ echo "$(_BOLD)$(_GREEN)------------------------------------------------------------------------------------------------>>> End Make MLX $(_END)"
 
-$(NAME): $(OBJ) $(MDEPS)
-	@ echo "$(_BOLD)$(_GREEN)------------------------------------------------------------------------------------------------>>> End check .h $(_END)"
+
+
+$(NAME): $(OBJ)
 	@ $(CC) $(OBJ) $(LIB_MLX_LINK) $(LIB_FT_LINK) -lm -o $(NAME)
 	@ echo "$(_BOLD)$(_GREEN)------------------------------------------------------------------------------------------------>>> End ALL $(_END)"
+
+
+
 
 clean:
 	@ rm -rf $(OBJFILE)

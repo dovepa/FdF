@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 20:18:18 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/29 17:08:05 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 16:18:42 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ t_list *ft_parseur(int fd, t_fdf *fdf)
 	t_list *listc;
 
 	list = NULL;
-	fdf->x = 0;
+	fdf->x = __INT_MAX__;
 	fdf->y = 0;
 	listc = list;
 	ft_putendl("\x1b[1m\x1b[32m Parsing... it could take a while\x1b[0m");
 	while (get_next_line(fd, &str) > 0)
 	{
-		if (fdf->x == 0)
+		if (fdf->x > ft_wordlen(str, ' '))
 			fdf->x = ft_wordlen(str, ' ');
 		if ((listc = ft_lstnew((void *)str, (ft_strlen(str) + 1))) == NULL)
 			return (NULL);
@@ -33,12 +33,14 @@ t_list *ft_parseur(int fd, t_fdf *fdf)
 		ft_lstadd(&list, listc);
 		free(str);
 	}
+	if ((fdf->x == __INT_MAX__) || (fdf->x <= 0))
+		return (NULL);
 	ft_lstrev(&listc);
 	return (listc);
 }
 
 
-void	ft_imgdel(t_fdf *fdf)
+int	ft_imgdel(t_fdf *fdf)
 {
 	if (fdf->img != NULL)
 	{
@@ -46,18 +48,18 @@ void	ft_imgdel(t_fdf *fdf)
 			mlx_destroy_image(fdf->mlx_ptr, fdf->img->img_ptr);
 		ft_memdel((void **)&fdf->img);
 	}
-	return ;
+	return (1);
 }
 
-void	ft_inimg(t_fdf *fdf)
+int	ft_inimg(t_fdf *fdf)
 {
 	if ((fdf->img = ft_memalloc(sizeof(t_mlximg))) == NULL)
-		return ;
+		return (1);
 	if ((fdf->img->img_ptr = mlx_new_image(fdf->mlx_ptr, WIN_WIDTH, WIN_HEIGHT)) == NULL)
 		return (ft_imgdel(fdf));
 	fdf->img->data = (unsigned int *)mlx_get_data_addr(fdf->img->img_ptr, &fdf->img->bpp,\
 	 &fdf->img->size_l, &fdf->img->endian);
-	return ;
+	return (0);
 }
 
 t_vector ft_vc(t_vector a, t_fdf *fdf)
@@ -86,23 +88,23 @@ t_vector ft_vc(t_vector a, t_fdf *fdf)
 
 void ft_draw(t_fdf *fdf)
 {
-
-	ft_inimg(fdf);
-
 	int x;
-	x = 0;
 	int y;
-	y = 0;
 
+	y = 0;
+	if (ft_inimg(fdf) == 1)
+		return ;
 	while (y < fdf->y)
 	{
 		x = 0;
 		while (x < fdf->x)
 		{
 			if (x + 1 < fdf->x)
-				ft_bresenham(fdf, ft_vc(fdf->map->vector[y][x], fdf), ft_vc(fdf->map->vector[y][x + 1], fdf));
+				ft_bresenham(fdf, ft_vc(fdf->map->vector[y][x], fdf), \
+				ft_vc(fdf->map->vector[y][x + 1], fdf));
 			if (y + 1 < fdf->y)
-				ft_bresenham(fdf, ft_vc(fdf->map->vector[y][x], fdf), ft_vc(fdf->map->vector[y + 1][x], fdf));
+				ft_bresenham(fdf, ft_vc(fdf->map->vector[y][x], fdf), \
+				ft_vc(fdf->map->vector[y + 1][x], fdf));
 			x++;
 		}
 		y++;
@@ -120,6 +122,7 @@ t_fdf *ft_init(char *title, t_fdf *fdf)
 		return (NULL);
 	fdf->arrow->p = 1;
 	fdf->arrow->rotate = 0;
-
+	fdf->arrow->x = DEFAULTX;
+	fdf->arrow->y = DEFAULTY;
 	return (fdf);
 }

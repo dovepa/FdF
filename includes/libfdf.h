@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 00:52:23 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/29 17:08:26 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 16:19:31 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define DEFAULTY	25.0
 
 /*
-**	Keyboard
+**	Keyboard and Colors
 */
 
 # define ESC_KEY	53
@@ -43,32 +43,12 @@
 # define KING		40
 # define Q_KEY		12
 # define W_KEY		13
-
-
-/*
-**	hex colors for test (#include "mlx_rgb.c")
-**	Structures for use fucking colors in "mlx_rgb.c"
-**	color hex to rgb
-**	r = ((color >> 16) & 11111111);
-**	g = ((color >> 8) & 11111111);
-**	b = (color & 11111111);
-**	data[y * win_width * 4 + x * 4 + 2] = (char) r;
-**	data[y * win_width * 4 + x * 4 + 1] = (char) g;
-**	data[y * win_width * 4 + x * 4] = (char) b;
-*/
-
 # define WHITE		0xFFFFFF
 # define YELLOW		0xFFF00A
 # define ORANGE		0xFF9900
 # define PINK		0xFF00FF
 # define BLUE		0x0000FF
 # define RED		0xFF0000
-
-typedef struct		s_col_name
-{
-  char				*name;
-  int				color;
-}					t_col_name;
 
 /*
 **	Structures
@@ -124,12 +104,13 @@ typedef	struct		s_fdf
 typedef	struct		s_bresenham
 {
 	int				e;
+	t_vector		vec[2];
 	int				xi;
 	int				yi;
 	double			dx;
 	double			dy;
 	int				i;
-}					t_bresenham;
+}				t_bresenham;
 
 
 /*
@@ -138,8 +119,8 @@ typedef	struct		s_bresenham
 
 t_fdf 	*ft_init(char *title, t_fdf *fdf);
 void	ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2);
-void	ft_imgdel(t_fdf *fdf);
-void	ft_inimg(t_fdf *fdf);
+int	ft_imgdel(t_fdf *fdf);
+int	ft_inimg(t_fdf *fdf);
 void	ft_draw(t_fdf *fdf);
 t_list  *ft_parseur(int fd, t_fdf *fdf);
 void	ft_delsplit(char **s);
@@ -148,7 +129,6 @@ int		ft_key(int key, t_fdf *fdf);
 int		ft_color(t_fdf *fdf);
 void	ft_pixel(unsigned int *data, int x, int y, unsigned int color);
 void ft_dellst(void *a, size_t b);
-
 
 
 #endif

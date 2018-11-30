@@ -6,17 +6,17 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/28 12:44:39 by dpalombo          #+#    #+#             */
-/*   Updated: 2017/12/06 20:56:04 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 14:37:26 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_error(void)
+int	ft_error(void)
 {
 	char const *stre;
 
 	stre = "error";
 	ft_putendl(stre);
-	return ;
+	return (1);
 }

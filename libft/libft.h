@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/12 00:10:54 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/11 10:01:47 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 14:37:08 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ int					ft_islower(int c);
 int					ft_isspace(int c);
 int					ft_nbrlen(int c);
 int					ft_recursive_factorial(int nb);
-void				ft_error(void);
-void				ft_strerror(char const *str);
-void				ft_usage(char const *str);
+int					ft_error(void);
+int					ft_strerror(char const *str);
+int					ft_usage(char const *str);
 void				ft_lstrev(t_list **list);
 int					ft_wordlen(char *str, char sep);
 unsigned int		ft_atohexp(const char *str);
