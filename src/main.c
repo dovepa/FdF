@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 18:31:48 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/30 15:48:56 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 16:24:22 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_findz(t_fdf *fdf)
 	return ;
 }
 
-int ft_makevecx(int x, int y, t_fdf *fdf, char **tmp)
+static int ft_makevecx(int x, int y, t_fdf *fdf, char **tmp)
 {
 	char **tmp2;
 
@@ -70,7 +70,7 @@ int ft_makevecx(int x, int y, t_fdf *fdf, char **tmp)
 	return (0);	
 }
 
-int ft_makevec(t_fdf *fdf, t_list *listc)
+static int ft_makevec(t_fdf *fdf, t_list *listc)
 {
 	int x;
 	int y;

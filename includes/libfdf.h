@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 00:52:23 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/30 16:19:31 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 16:27:29 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,18 +117,19 @@ typedef	struct		s_bresenham
 **	Functions
 */
 
-t_fdf 	*ft_init(char *title, t_fdf *fdf);
-void	ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2);
-int	ft_imgdel(t_fdf *fdf);
-int	ft_inimg(t_fdf *fdf);
-void	ft_draw(t_fdf *fdf);
-t_list  *ft_parseur(int fd, t_fdf *fdf);
-void	ft_delsplit(char **s);
-int		ft_exit(t_fdf *fdf);
-int		ft_key(int key, t_fdf *fdf);
-int		ft_color(t_fdf *fdf);
-void	ft_pixel(unsigned int *data, int x, int y, unsigned int color);
-void ft_dellst(void *a, size_t b);
-
+void		ft_delsplit(char **s);
+void		ft_findz(t_fdf *fdf);
+int			ft_makemap(t_list *list, t_fdf *fdf);
+int			ft_exit(t_fdf *fdf);
+int			ft_cmdkey(int key, t_fdf *fdf);
+t_fdf		*ft_infdf(t_fdf *fdf);
+int			ft_key(int key, t_fdf *fdf);
+void		ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2);
+t_list		*ft_parseur(int fd, t_fdf *fdf);
+int			ft_imgdel(t_fdf *fdf);
+int			ft_inimg(t_fdf *fdf);
+t_vector	ft_vc(t_vector a, t_fdf *fdf);
+void		ft_draw(t_fdf *fdf);
+t_fdf		*ft_init(char *title, t_fdf *fdf);
 
 #endif

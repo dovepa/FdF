@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/25 14:05:18 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/30 13:57:12 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 16:25:33 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int ft_pixel_color(t_fdf *fdf, t_bresenham val, t_vector v1, t_vector v2)
 	return(color);
 }
 
-void	ft_pixel(unsigned int *data, int x, int y, unsigned int color)
+static void	ft_pixel(unsigned int *data, int x, int y, unsigned int color)
 {
 	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
 		return ;

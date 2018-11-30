@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/25 14:12:15 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/30 01:44:09 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/11/30 16:25:02 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int ft_colornum(int a)
 	return(colortab[a]);
 }
 
-int ft_rotate(t_fdf *fdf)
+static int ft_rotate(t_fdf *fdf)
 {
 	if (fdf->arrow->rotate == 1)
 	{
@@ -52,7 +52,7 @@ int ft_rotate(t_fdf *fdf)
 	return (0);
 }
 
-int ft_king(t_fdf *fdf)
+static int ft_king(t_fdf *fdf)
 {
 	
 	if (fdf->arrow->rotate == 1)
@@ -75,7 +75,7 @@ int ft_king(t_fdf *fdf)
 	return (0);
 }
 
-int ft_color(t_fdf *fdf)
+static int ft_color(t_fdf *fdf)
 {
 	if (fdf->map->ready == 1)
 	{
