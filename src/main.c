@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 18:31:48 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/12/01 22:36:29 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/12/01 23:04:47 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int ft_exit(t_fdf *fdf)
 	(void)fdf;
 	mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
 	exit(EXIT_SUCCESS);
+	return (0);
 }
 
 int ft_cmdkey(int key, t_fdf *fdf)
