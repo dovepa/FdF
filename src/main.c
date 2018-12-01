@@ -6,7 +6,7 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 18:31:48 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/30 16:24:22 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/12/01 22:36:29 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int	main(int argc, char **argv)
 	((list = ft_parseur(fd, fdf)) == NULL) || (ft_makemap(list,fdf) == 1))
 		return (ft_strerror("\x1b[1m\x1b[41m  invalid file \x1b[0m"));
 	close(fd);
-	if ((ft_init((str1 = ft_strjoin("42 FdF : ", argv[1])), fdf)) == NULL)
+	if ((fdf = ft_init((str1 = ft_strjoin("42 FdF : ", argv[1])), fdf)) == NULL)
 		return (ft_strerror("\x1b[1m\x1b[41m  --- Mlx init error --- \x1b[0m"));
 	ft_putendl("\x1b[1m\x1b[32m --- Mlx init --- \x1b[0m");
 	ft_draw(fdf);		
