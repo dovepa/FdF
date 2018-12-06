@@ -6,7 +6,7 @@
 #    By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/07 12:54:37 by dpalombo          #+#    #+#              #
-#    Updated: 2018/12/01 19:06:23 by dpalombo         ###   ########.fr        #
+#    Updated: 2018/12/06 14:37:29 by dpalombo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
 
 # ------------------------------------ SRC PROG ------------------------------------
-SRC		= main.c	draw.c	event.c	img.c
+SRC		= main.c	draw.c	event.c	img.c	mlx.c opt.c
 
 OBJFILE	= obj/
 SRCFILE	= src/

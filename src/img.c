@@ -6,17 +6,17 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 20:18:18 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/30 16:26:35 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/12/06 14:24:21 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libfdf.h"
 
-t_list *ft_parseur(int fd, t_fdf *fdf)
+t_list		*ft_parseur(int fd, t_fdf *fdf)
 {
 	char	*str;
-	t_list *list;
-	t_list *listc;
+	t_list	*list;
+	t_list	*listc;
 
 	list = NULL;
 	fdf->x = __INT_MAX__;
@@ -39,30 +39,7 @@ t_list *ft_parseur(int fd, t_fdf *fdf)
 	return (listc);
 }
 
-
-int	ft_imgdel(t_fdf *fdf)
-{
-	if (fdf->img != NULL)
-	{
-		if (fdf->img->img_ptr != NULL)
-			mlx_destroy_image(fdf->mlx_ptr, fdf->img->img_ptr);
-		ft_memdel((void **)&fdf->img);
-	}
-	return (1);
-}
-
-int	ft_inimg(t_fdf *fdf)
-{
-	if ((fdf->img = ft_memalloc(sizeof(t_mlximg))) == NULL)
-		return (1);
-	if ((fdf->img->img_ptr = mlx_new_image(fdf->mlx_ptr, WIN_WIDTH, WIN_HEIGHT)) == NULL)
-		return (ft_imgdel(fdf));
-	fdf->img->data = (unsigned int *)mlx_get_data_addr(fdf->img->img_ptr, &fdf->img->bpp,\
-	 &fdf->img->size_l, &fdf->img->endian);
-	return (0);
-}
-
-t_vector ft_vc(t_vector a, t_fdf *fdf)
+t_vector	ft_vc(t_vector a, t_fdf *fdf)
 {
 	double	tmp;
 	double	tmp1;
@@ -86,7 +63,7 @@ t_vector ft_vc(t_vector a, t_fdf *fdf)
 	return (a);
 }
 
-void ft_draw(t_fdf *fdf)
+void		ft_draw(t_fdf *fdf)
 {
 	int x;
 	int y;
@@ -109,20 +86,8 @@ void ft_draw(t_fdf *fdf)
 		}
 		y++;
 	}
-	mlx_put_image_to_window(fdf->mlx_ptr, fdf->win_ptr, fdf->img->img_ptr, 0, 0);
+	mlx_put_image_to_window(fdf->mlx_ptr, \
+	fdf->win_ptr, fdf->img->img_ptr, 0, 0);
 	ft_imgdel(fdf);
 	return ;
-}
-
-t_fdf *ft_init(char *title, t_fdf *fdf)
-{
-	if ((fdf->mlx_ptr = mlx_init()) == NULL ||	
-	(fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, title)) == NULL ||
-	(fdf->arrow = (t_arrow *)ft_memalloc(sizeof(t_arrow))) == NULL)
-		return (NULL);
-	fdf->arrow->p = 1;
-	fdf->arrow->rotate = 0;
-	fdf->arrow->x = DEFAULTX;
-	fdf->arrow->y = DEFAULTY;
-	return (fdf);
 }

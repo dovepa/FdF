@@ -6,16 +6,16 @@
 /*   By: dpalombo <dpalombo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 00:52:23 by dpalombo          #+#    #+#             */
-/*   Updated: 2018/11/30 16:27:29 by dpalombo         ###   ########.fr       */
+/*   Updated: 2018/12/06 14:54:35 by dpalombo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIB_FDF
-# define LIB_FDF
+#ifndef LIBFDF_H
+# define LIBFDF_H
 
-#include "libft.h"
-#include "mlx.h"
-#include <math.h>
+# include "libft.h"
+# include "mlx.h"
+# include <math.h>
 
 /*
 **	Map
@@ -64,7 +64,7 @@ typedef	struct		s_arrow
 
 typedef	struct		s_vector
 {
-	double				x;
+	double			x;
 	double			y;
 	double			z;
 	unsigned int	color;
@@ -99,6 +99,7 @@ typedef	struct		s_fdf
 	t_mlximg		*img;
 	t_map			*map;
 	t_arrow			*arrow;
+	char			*title;
 }					t_fdf;
 
 typedef	struct		s_bresenham
@@ -110,26 +111,26 @@ typedef	struct		s_bresenham
 	double			dx;
 	double			dy;
 	int				i;
-}				t_bresenham;
-
+}					t_bresenham;
 
 /*
 **	Functions
 */
 
-void		ft_delsplit(char **s);
-void		ft_findz(t_fdf *fdf);
-int			ft_makemap(t_list *list, t_fdf *fdf);
-int			ft_exit(t_fdf *fdf);
-int			ft_cmdkey(int key, t_fdf *fdf);
-t_fdf		*ft_infdf(t_fdf *fdf);
-int			ft_key(int key, t_fdf *fdf);
-void		ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2);
-t_list		*ft_parseur(int fd, t_fdf *fdf);
-int			ft_imgdel(t_fdf *fdf);
-int			ft_inimg(t_fdf *fdf);
-t_vector	ft_vc(t_vector a, t_fdf *fdf);
-void		ft_draw(t_fdf *fdf);
-t_fdf		*ft_init(char *title, t_fdf *fdf);
+void				ft_delsplit(char **s);
+void				ft_findz(t_fdf *fdf);
+int					ft_makemap(t_list *list, t_fdf *fdf);
+int					ft_exit(t_fdf *fdf);
+int					ft_cmdkey(int key, t_fdf *fdf);
+t_fdf				*ft_infdf(t_fdf *fdf);
+int					ft_key(int key, t_fdf *fdf);
+void				ft_bresenham(t_fdf *fdf, t_vector v1, t_vector v2);
+t_list				*ft_parseur(int fd, t_fdf *fdf);
+int					ft_imgdel(t_fdf *fdf);
+int					ft_inimg(t_fdf *fdf);
+t_vector			ft_vc(t_vector a, t_fdf *fdf);
+void				ft_draw(t_fdf *fdf);
+int					ft_init(char *title, t_fdf *fdf);
+int					ft_makevec(t_fdf *fdf, t_list *listc);
 
 #endif
